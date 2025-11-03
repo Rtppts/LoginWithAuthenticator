@@ -26,7 +26,7 @@ async function initDb() {
     const secret = speakeasy.generateSecret({ name: 'MyApp (Admin)' });
     await db.run(
       'INSERT INTO users (username, password, totp_secret) VALUES (?, ?, ?);',
-      'Admin', '1234', secret.base32
+      'admin', '123', secret.base32
     );
     console.log('Created default Admin user with TOTP secret:', secret.base32);
   }
@@ -41,16 +41,16 @@ async function start() {
 
   // 1. Register: สร้าง secret และ QR code สำหรับ user ใหม่
   app.post('/auth/register', async (req, res) => {
-    const { username } = req.body;
-    if (!username) return res.status(400).json({ error: 'Missing username' });
+    const { username, password } = req.body;
+    if (!username || !password) return res.status(400).json({ error: 'Missing username or password' });
 
     // สร้าง secret ใหม่
     const secret = speakeasy.generateSecret({ name: `MyApp (${username})` });
 
-    // บันทึกลง DB
+    // บันทึกลง DB พร้อม password
     await db.run(
-      `INSERT OR REPLACE INTO users (username, totp_secret) VALUES (?, ?);`,
-      username, secret.base32
+      `INSERT OR REPLACE INTO users (username, password, totp_secret) VALUES (?, ?, ?);`,
+      username, password, secret.base32
     );
 
     // สร้าง QR code
