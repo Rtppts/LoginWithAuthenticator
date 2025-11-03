@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "vite-project",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons": "^6.1.0",
+    "@react-oauth/google": "^0.12.2",
+    "antd": "^5.27.6",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
